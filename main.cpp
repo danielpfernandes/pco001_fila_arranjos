@@ -34,14 +34,14 @@ int main()
     imprimeFila(primeiraFila);
     imprimeFila(segundaFila);
 
-    cout << endl <<  "05. Localizar um dados na Lista" << endl;
-    alterarItem(primeiraFila, 2, 1);
-    alterarItem(segundaFila, 3, 1);
+    cout << endl <<  "05. Localizar dados na Lista" << endl;
+    alterarItem(primeiraFila, 2);
+    alterarItem(segundaFila, 3);
 
     cout << endl << "06. Combinar duas ou mais estruturas em uma" << endl;
-    auto *filaCombinada = new TipoFila;
+    TipoFila* filaCombinada = new TipoFila;
     criaFila(filaCombinada);
-    combinarFilas(segundaFila, primeiraFila);
+    combinarFilas(segundaFila, primeiraFila, filaCombinada);
     imprimeFila(filaCombinada);
 
     cout << endl << "07. Partir uma estrutura em duas ou mais" << endl;

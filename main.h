@@ -128,39 +128,42 @@ int removerItemNaPosicao(TipoFila* fila, int posicao)
     return itemRemovido;
 }
 
-void alterarItem(TipoFila* fila, int posicao, int valor)
+void alterarItem(TipoFila* fila, int posicao)
 {
     if(isVazia(fila))
     {
         cout << "ERRO! Fila está vazia" << endl;
         return;
     }
-    TipoFila filaAuxiliar = carregarFilaAuxiliar(fila, posicao+1);
-    cout << "Valor " + to_string(fila->dados[fila->inicio+posicao]) + " encontrado na posição " + to_string(posicao) << endl;
-    bool shouldChange = true;
-    if(shouldChange)
+    cout << "Valor " + to_string(fila->dados[fila->inicio+posicao])
+        + " encontrado na posição " + to_string(posicao) << endl
+        << "Gostaria de altera? (s/n)";
+
+    string shouldChange = "n";
+    cin >> shouldChange;
+    if(shouldChange == "s")
     {
+        int valor;
+        cout << "Insira o valor: ";
+        cin >> valor;
         fila->dados[fila->inicio+posicao] = valor;
     }
 }
 
-TipoFila combinarFilas(const TipoFila* primeiraFila, const TipoFila* segundaFila)
+void combinarFilas(const TipoFila* primeiraFila, const TipoFila* segundaFila, TipoFila* filaCombinada)
 {
-    TipoFila filaCombinada;
-    criaFila(&filaCombinada);
     if (primeiraFila->nItens + segundaFila->nItens > TAMANHO_MAXIMO)
     {
         cout << "ERRO! O tamanho das duas lista é maior do que a nova lista" << endl;
     }
-    for (int i = primeiraFila->inicio; i <= primeiraFila->fim; i++)
+    for (int i = primeiraFila->inicio; i < primeiraFila->fim; i++)
     {
-        inserir(&filaCombinada, primeiraFila->dados[i - 1]);
+        inserir(filaCombinada, primeiraFila->dados[i]);
     }
-    for (int j = segundaFila->inicio; j <= segundaFila->fim; j ++)
+    for (int j = segundaFila->inicio; j < segundaFila->fim; j ++)
     {
-        inserir(&filaCombinada, segundaFila->dados[j - 1]);
+        inserir(filaCombinada, segundaFila->dados[j]);
     }
-    return filaCombinada;
 }
 
 void dividirFila(TipoFila* filaOriginal, TipoFila* novaFila, int posicao)
