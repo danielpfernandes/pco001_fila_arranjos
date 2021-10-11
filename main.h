@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <cstring>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -30,9 +32,9 @@ bool isVazia(const TipoFila *fila) { return fila->inicio == fila->fim; }
 void imprimeFila(TipoFila *fila)
 {
     cout << "Fila -> ";
-    for (int i = 0; i < fila->fim; i++)
+    for (int i = fila->inicio; i < fila->fim; i++)
     {
-        cout << to_string(i+1) + ") " + to_string(fila->dados[i]);
+        cout << to_string(fila->dados[i]);
         if (i + 1 < fila->fim)
         {
             cout << ", ";
@@ -68,12 +70,13 @@ int remover(TipoFila* fila)
         return -1;
     }
     int dados = fila->dados[fila->inicio];
+    fila->dados[fila->inicio] = 0;
     fila->inicio = sucessor(fila, fila->inicio);
     fila->nItens--;
     return dados;
 }
 
-TipoFila carregarFilaAuxiliar(TipoFila* fila, int posicao)
+TipoFila carregarFilaAuxiliarParaRemover(TipoFila* fila, int posicao)
 {
     TipoFila filaAux;
     criaFila(&filaAux);
@@ -85,13 +88,31 @@ TipoFila carregarFilaAuxiliar(TipoFila* fila, int posicao)
     return filaAux;
 }
 
+TipoFila carregarFilaAuxiliar(TipoFila* fila, int posicao)
+{
+    TipoFila filaAux;
+    criaFila(&filaAux);
+    for(int i = fila->inicio; i < posicao; i++)
+    {
+        inserir(&filaAux, fila->dados[i]);
+    }
+    return filaAux;
+}
+
 void descarregarFilaAuxiliar(TipoFila* filaAuxiliar, TipoFila* fila)
 {
+    fila->inicio = fila->inicio - filaAuxiliar->nItens;
     for(int i = filaAuxiliar->inicio; i < filaAuxiliar->fim; i++)
     {
-        inserir(fila, filaAuxiliar->dados[i]);
-        remover(filaAuxiliar);
+        fila->dados[fila->inicio+i] = filaAuxiliar->dados[i];
+        fila->nItens++;
     }
+    for(int j = filaAuxiliar->fim; j < fila->fim; j++)
+    {
+        fila->dados[j+1] = fila->dados[j+2];
+    }
+    fila->fim--;
+    fila->nItens--;
 }
 
 int removerItemNaPosicao(TipoFila* fila, int posicao)
@@ -101,8 +122,8 @@ int removerItemNaPosicao(TipoFila* fila, int posicao)
         cout << "ERRO! Fila está vazia" << endl;
         return -1;
     }
-    TipoFila filaAuxiliar = carregarFilaAuxiliar(fila, posicao);
-    int itemRemovido = remover(fila);
+    int itemRemovido = fila->dados[fila->inicio+posicao-1];
+    TipoFila filaAuxiliar = carregarFilaAuxiliarParaRemover(fila, posicao);
     descarregarFilaAuxiliar(&filaAuxiliar, fila);
     return itemRemovido;
 }
@@ -114,14 +135,13 @@ void alterarItem(TipoFila* fila, int posicao, int valor)
         cout << "ERRO! Fila está vazia" << endl;
         return;
     }
-    TipoFila filaAuxiliar = carregarFilaAuxiliar(fila, posicao);
-    bool shouldChange = false;
+    TipoFila filaAuxiliar = carregarFilaAuxiliar(fila, posicao+1);
+    cout << "Valor " + to_string(fila->dados[fila->inicio+posicao]) + " encontrado na posição " + to_string(posicao) << endl;
+    bool shouldChange = true;
     if(shouldChange)
     {
-        remover(fila);
-        inserir(fila, valor);
+        fila->dados[fila->inicio+posicao] = valor;
     }
-    descarregarFilaAuxiliar(&filaAuxiliar, fila);
 }
 
 TipoFila combinarFilas(const TipoFila* primeiraFila, const TipoFila* segundaFila)
@@ -143,54 +163,54 @@ TipoFila combinarFilas(const TipoFila* primeiraFila, const TipoFila* segundaFila
     return filaCombinada;
 }
 
-void dividirListas(TipoFila& listaOriginal, TipoFila* novaListaEsquerda, TipoFila* novaListaDireita)
+void dividirFila(TipoFila* filaOriginal, TipoFila* novaFila, int posicao)
 {
-    int posicao = 1;
-    int meio = listaOriginal.fim / 2;
-    for(int i = listaOriginal.inicio - 1; i < listaOriginal.fim; i++)
+    TipoFila* filaAuxiliar = filaOriginal;
+    for(int i = 0; i < filaOriginal->nItens; i++)
     {
-        if(i < meio)
+        if(i < posicao)
         {
-            inserir(novaListaEsquerda, listaOriginal.dados[i]);
+            inserir(filaOriginal, filaAuxiliar->dados[i]);
         }
         else
         {
-            inserir(novaListaDireita, listaOriginal.dados[i]);
+            inserir(novaFila, filaAuxiliar->dados[i]);
             posicao++;
         }
     }
 }
 
-void copiarLista(TipoFila& listaOriginal, TipoFila* novaLista)
+TipoFila* copiarFila(TipoFila* filaOriginal)
 {
-    for(int i = listaOriginal.inicio; i <= listaOriginal.fim; i++)
+    TipoFila* novaFila;
+    criaFila(novaFila);
+    for(int i = filaOriginal->inicio; i <= filaOriginal->fim; i++)
     {
-        inserir(novaLista, listaOriginal.dados[i - 1]);
+        inserir(novaFila, filaOriginal->dados[i - 1]);
     }
+    return novaFila;
 }
-void ordenaLista(TipoFila* lista)
+void ordenaFila(TipoFila* fila)
 {
-    int temp;
-    for(int j = 0; j< lista->fim - 1; j++)
+    vector<int> temp;
+    for(int i = 0; i < fila->fim; i++)
     {
-        for(int i = 0; i < lista->fim - 1; i++)
-        {
-            if(lista->dados[i] == lista->dados[i + 1])
-            {
-                temp = lista->dados[i];
-                lista->dados[i] = lista->dados[i + 1];
-                lista->dados[i + 1] = temp;
-            }
-        }
+        temp.push_back(fila->dados[i]);
+    }
+    std::sort(temp.begin(), temp.end());
+    criaFila(fila);
+    for(int value: temp)
+    {
+        inserir(fila, value);
     }
 }
 void buscarOcorrenciaDeValor(TipoFila* lista, const int valorBuscado)
 {
     int ocorrencia = 0;
     bool isPresent = false;
-    for (int i = lista.inicio; i <= lista.fim; i++)
+    for (int i = lista->inicio; i <= lista->fim; i++)
     {
-        if(lista.dados[i - 1] == valorBuscado)
+        if(lista->dados[i - 1] == valorBuscado)
         {
             ocorrencia++;
             isPresent = true;

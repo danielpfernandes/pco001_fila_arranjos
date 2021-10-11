@@ -3,3 +3,11 @@
 /cmake-build-minsizerel/
 /cmake-build-release/
 /cmake-build-relwithdebinfo/
+/.idea/.gitignore
+/.idea/.name
+/.idea/dictionaries/danie.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/pco001-lista-arranjos.iml
+/.idea/vcs.xml
+/.gitignore

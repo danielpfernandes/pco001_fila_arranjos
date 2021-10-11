@@ -5,64 +5,64 @@
 
 int main()
 {
-    auto *primeiraLista = new TipoFila;
-    auto *segundaLista = new TipoFila;
+    auto *primeiraFila = new TipoFila;
+    auto *segundaFila = new TipoFila;
 
     cout << "01. Criação da estrutura de dados vazia" << endl;
-    criaFila(primeiraLista);
-    criaFila(segundaLista);
-    imprimeFila(primeiraLista);
-    imprimeFila(segundaLista);
+    criaFila(primeiraFila);
+    criaFila(segundaFila);
+    imprimeFila(primeiraFila);
+    imprimeFila(segundaFila);
 
     cout << endl << "02. Inserir um novo dados imediatamente após o i-ésimo dados" << endl;
-    inserir(primeiraLista, 11);
-    inserir(segundaLista, 21);
-    imprimeFila(primeiraLista);
-    imprimeFila(segundaLista);
+    int valoresPrimeiraFila[] = {54, 23, 657, 12, 45, 89, 5, 3};
+    int valoresSegundaFila[] = {645, 78, 30, 64, 40, 1, 9, 34};
+    for(int i: valoresPrimeiraFila) { inserir(primeiraFila, i);}
+    for(int j: valoresSegundaFila) { inserir(segundaFila, j);}
+    imprimeFila(primeiraFila);
+    imprimeFila(segundaFila);
 
     cout << endl <<  "03. Retirar o inicio dados" << endl;
-    remover(primeiraLista);
-    remover(segundaLista);
-    imprimeFila(primeiraLista);
-    imprimeFila(segundaLista);
+    remover(primeiraFila);
+    remover(segundaFila);
+    imprimeFila(primeiraFila);
+    imprimeFila(segundaFila);
 
     cout << endl << "04. Retirar o i-ésimo dados" << endl;
-    removerItemNaPosicao(primeiraLista, 2);
-    removerItemNaPosicao(segundaLista, 2);
-    imprimeFila(primeiraLista);
-    imprimeFila(segundaLista);
+    removerItemNaPosicao(primeiraFila, 4);
+    removerItemNaPosicao(segundaFila, 2);
+    imprimeFila(primeiraFila);
+    imprimeFila(segundaFila);
 
     cout << endl <<  "05. Localizar um dados na Lista" << endl;
-    alterarItem(primeiraLista, 2, 1);
-    alterarItem(segundaLista, 3, 1);
+    alterarItem(primeiraFila, 2, 1);
+    alterarItem(segundaFila, 3, 1);
 
     cout << endl << "06. Combinar duas ou mais estruturas em uma" << endl;
-    auto *novaLista = new TipoFila;
-    criaFila(novaLista);
-    combinarFilas(segundaLista, primeiraLista);
-    imprimeFila(novaLista);
+    auto *filaCombinada = new TipoFila;
+    criaFila(filaCombinada);
+    combinarFilas(segundaFila, primeiraFila);
+    imprimeFila(filaCombinada);
 
     cout << endl << "07. Partir uma estrutura em duas ou mais" << endl;
-    auto *novaListaEsquerda = new TipoFila;
-    auto *novaListaDireita = new TipoFila;
-    criaFila(novaListaEsquerda);
-    criaFila(novaListaDireita);
-    dividirListas(*novaLista, novaListaEsquerda, novaListaDireita);
-    imprimeFila(novaListaEsquerda);
-    imprimeFila(novaListaDireita);
+    auto *novaFilaDividida = new TipoFila;
+    criaFila(novaFilaDividida);
+    dividirFila(filaCombinada, novaFilaDividida, 4);
+    imprimeFila(filaCombinada);
+    imprimeFila(novaFilaDividida);
 
     cout << endl << "08. Fazer uma cópia" << endl;
-    auto *listaCopiada = new TipoFila;
-    criaFila(listaCopiada);
-    copiarLista(*novaListaEsquerda, listaCopiada);
-    imprimeFila(listaCopiada);
+    auto *filaCopiada = new TipoFila;
+    criaFila(filaCopiada);
+    filaCopiada = copiarFila(novaFilaDividida);
+    imprimeFila(filaCopiada);
 
     cout << endl << "09. Ordenar os itens da estrutura" << endl;
-    ordenaLista(novaLista);
-    imprimeFila(novaLista);
+    ordenaFila(filaCombinada);
+    imprimeFila(filaCombinada);
 
     cout << endl << "10. Buscar a ocorrência de um valor particular" << endl;
-    inserir(novaLista, 1);
-    imprimeFila(novaLista);
-    buscarOcorrenciaDeValor(novaLista, 1);
+    inserir(filaCombinada, 1);
+    imprimeFila(filaCombinada);
+    buscarOcorrenciaDeValor(filaCombinada, 1);
 }
