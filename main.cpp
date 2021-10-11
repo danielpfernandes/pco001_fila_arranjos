@@ -39,22 +39,24 @@ int main()
     alterarItem(segundaFila, 3);
 
     cout << endl << "06. Combinar duas ou mais estruturas em uma" << endl;
-    TipoFila* filaCombinada = new TipoFila;
+    auto* filaCombinada = new TipoFila;
     criaFila(filaCombinada);
     combinarFilas(segundaFila, primeiraFila, filaCombinada);
     imprimeFila(filaCombinada);
 
     cout << endl << "07. Partir uma estrutura em duas ou mais" << endl;
-    auto *novaFilaDividida = new TipoFila;
-    criaFila(novaFilaDividida);
-    dividirFila(filaCombinada, novaFilaDividida, 4);
-    imprimeFila(filaCombinada);
-    imprimeFila(novaFilaDividida);
+    auto *novaPrimeiraFila = new TipoFila;
+    auto *novaSegundaFila = new TipoFila;
+    criaFila(novaPrimeiraFila);
+    criaFila(novaSegundaFila);
+    dividirFila(filaCombinada, novaPrimeiraFila, novaSegundaFila, 4);
+    imprimeFila(novaPrimeiraFila);
+    imprimeFila(novaSegundaFila);
 
     cout << endl << "08. Fazer uma cópia" << endl;
     auto *filaCopiada = new TipoFila;
     criaFila(filaCopiada);
-    filaCopiada = copiarFila(novaFilaDividida);
+    copiarFila(novaPrimeiraFila, filaCopiada);
     imprimeFila(filaCopiada);
 
     cout << endl << "09. Ordenar os itens da estrutura" << endl;
@@ -62,7 +64,7 @@ int main()
     imprimeFila(filaCombinada);
 
     cout << endl << "10. Buscar a ocorrência de um valor particular" << endl;
-    inserir(filaCombinada, 1);
+    inserir(filaCombinada, 23);
     imprimeFila(filaCombinada);
-    buscarOcorrenciaDeValor(filaCombinada, 1);
+    buscarOcorrenciaDeValor(filaCombinada, 23);
 }

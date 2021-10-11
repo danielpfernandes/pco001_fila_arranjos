@@ -15,9 +15,9 @@ using namespace std;
 
 typedef struct TipoFila
 {
-    int dados[TAMANHO_MAXIMO];
+    int dados[TAMANHO_MAXIMO]{};
     int capacidade = TAMANHO_MAXIMO;
-    int inicio{}, fim{}, nItens;
+    int inicio{}, fim{}, nItens{};
 } TipoFila;
 
 int sucessor(TipoFila* fila, int posicao)
@@ -31,10 +31,12 @@ bool isVazia(const TipoFila *fila) { return fila->inicio == fila->fim; }
 
 void imprimeFila(TipoFila *fila)
 {
+    int dados;
     cout << "Fila -> ";
     for (int i = fila->inicio; i < fila->fim; i++)
     {
-        cout << to_string(fila->dados[i]);
+        dados = fila->dados[i];
+        cout << std::to_string(dados);
         if (i + 1 < fila->fim)
         {
             cout << ", ";
@@ -84,17 +86,6 @@ TipoFila carregarFilaAuxiliarParaRemover(TipoFila* fila, int posicao)
     {
         inserir(&filaAux, fila->dados[i]);
         remover(fila);
-    }
-    return filaAux;
-}
-
-TipoFila carregarFilaAuxiliar(TipoFila* fila, int posicao)
-{
-    TipoFila filaAux;
-    criaFila(&filaAux);
-    for(int i = fila->inicio; i < posicao; i++)
-    {
-        inserir(&filaAux, fila->dados[i]);
     }
     return filaAux;
 }
@@ -166,37 +157,35 @@ void combinarFilas(const TipoFila* primeiraFila, const TipoFila* segundaFila, Ti
     }
 }
 
-void dividirFila(TipoFila* filaOriginal, TipoFila* novaFila, int posicao)
+void dividirFila(TipoFila* filaOriginal, TipoFila* novaPrimeiraFila, TipoFila* novaSegundaFila, int posicao)
 {
-    TipoFila* filaAuxiliar = filaOriginal;
     for(int i = 0; i < filaOriginal->nItens; i++)
     {
         if(i < posicao)
         {
-            inserir(filaOriginal, filaAuxiliar->dados[i]);
+            inserir(novaPrimeiraFila, filaOriginal->dados[i]);
         }
         else
         {
-            inserir(novaFila, filaAuxiliar->dados[i]);
+            inserir(novaSegundaFila,filaOriginal->dados[i]);
             posicao++;
         }
     }
 }
 
-TipoFila* copiarFila(TipoFila* filaOriginal)
+void copiarFila(TipoFila* filaOriginal, TipoFila* filaCopiada)
 {
-    TipoFila* novaFila;
-    criaFila(novaFila);
-    for(int i = filaOriginal->inicio; i <= filaOriginal->fim; i++)
+    for(int i = filaOriginal->inicio; i < filaOriginal->fim; i++)
     {
-        inserir(novaFila, filaOriginal->dados[i - 1]);
+        inserir(filaCopiada, filaOriginal->dados[i]);
     }
-    return novaFila;
 }
+
 void ordenaFila(TipoFila* fila)
 {
     vector<int> temp;
-    for(int i = 0; i < fila->fim; i++)
+    temp.reserve(fila->fim);
+for(int i = 0; i < fila->fim; i++)
     {
         temp.push_back(fila->dados[i]);
     }
